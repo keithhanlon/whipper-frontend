@@ -38,7 +38,7 @@ version bumps rather than depending on an unstable internal API.
 
 ### Option A: Debian package (recommended on Debian/Ubuntu-based systems)
 
-A `.deb` is available under `debian/` — build it yourself with:
+A `.deb` is available under `debian/` ; build it yourself with:
 
 ```bash
 sudo apt install debhelper-compat
