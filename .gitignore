@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+*.egg-info/
+
+# Debian packaging build artifacts (debian/rules generates these fresh
+# each build -- only the hand-written packaging source should be tracked)
+debian/whipper-frontend/
+debian/.debhelper/
+debian/files
+debian/*.substvars
+debian/debhelper-build-stamp
+debian/*.debhelper.log
+
+# Built package output (lands one directory up from the source tree
+# during a normal dpkg-buildpackage run, so this mostly guards against
+# accidentally building in-place)
+*.deb
+*.buildinfo
+*.changes
+
+# Editor/OS cruft
+.vscode/
+.idea/
+*~
+.DS_Store

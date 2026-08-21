@@ -1,0 +1,27 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	# Pure Python, nothing to compile.
+
+override_dh_auto_test:
+	# No automated test suite yet.
+
+override_dh_auto_install:
+	mkdir -p debian/whipper-frontend/usr/lib/python3/dist-packages
+	cp -r whippergui debian/whipper-frontend/usr/lib/python3/dist-packages/
+	find debian/whipper-frontend/usr/lib/python3/dist-packages/whippergui \
+		-name '__pycache__' -exec rm -rf {} + 2>/dev/null || true
+
+	mkdir -p debian/whipper-frontend/usr/bin
+	install -m 755 debian/whipper-frontend-launcher debian/whipper-frontend/usr/bin/whipper-frontend
+
+	mkdir -p debian/whipper-frontend/usr/share/applications
+	install -m 644 debian/whipper-frontend.desktop \
+		debian/whipper-frontend/usr/share/applications/whipper-frontend.desktop
+
+	mkdir -p debian/whipper-frontend/usr/share/icons/hicolor/scalable/apps
+	install -m 644 debian/whipper-frontend.svg \
+		debian/whipper-frontend/usr/share/icons/hicolor/scalable/apps/whipper-frontend.svg

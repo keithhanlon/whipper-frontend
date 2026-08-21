@@ -1,0 +1,14 @@
+#!/usr/bin/python3
+"""Launcher installed as /usr/bin/whipper-frontend by the Debian package.
+
+Unlike main.py (used for running from source), this assumes whippergui
+is already importable from the system Python path (installed to
+/usr/lib/python3/dist-packages/ by debian/rules), so it doesn't touch
+sys.path at all.
+"""
+import sys
+
+from whippergui.app import run
+
+if __name__ == "__main__":
+    sys.exit(run())

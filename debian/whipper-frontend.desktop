@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Whipper Frontend
+Comment=Rip audio CDs accurately with whipper
+Exec=whipper-frontend
+Icon=whipper-frontend
+Terminal=false
+Categories=AudioVideo;Audio;

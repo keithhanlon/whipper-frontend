@@ -1,0 +1,31 @@
+Source: whipper-frontend
+Section: sound
+Priority: optional
+Maintainer: Keith Hanlon <keith@citizenkeith.com>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.6.2
+Homepage: https://github.com/citizenkeith/whipper-frontend
+Rules-Requires-Root: no
+
+Package: whipper-frontend
+Architecture: all
+Depends: ${misc:Depends},
+         python3,
+         python3-pyside6.qtcore,
+         python3-pyside6.qtwidgets,
+         python3-pyside6.qtgui,
+         whipper,
+         libxcb-cursor0,
+         cdrdao
+Recommends: php-cli
+Description: Qt GUI frontend for the whipper CD ripper
+ Whipper Frontend provides a graphical interface for whipper, an accurate,
+ AccurateRip-verifying CD ripper for Linux (in the spirit of EAC/XLD).
+ .
+ Features include drive read-offset detection, live per-track and
+ overall rip progress, cover art fetching, custom file/folder naming
+ templates, and optional rip log verification via OPSnet's logchecker
+ (the same tool used by trackers such as Orpheus).
+ .
+ This package only wraps whipper's own command-line interface via
+ subprocess — it does not modify or replace whipper itself.
