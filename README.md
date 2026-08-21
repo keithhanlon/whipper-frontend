@@ -2,8 +2,7 @@
 
 A Qt (PySide6) GUI for [whipper](https://github.com/whipper-team/whipper), an
 accurate, AccurateRip-verifying CD ripper for Linux (in the spirit of EAC/XLD).
-Whipper Frontend wraps whipper's own command-line interface via subprocess —
-it never imports whipper's internals — so it stays compatible across whipper
+Whipper Frontend wraps whipper's own command-line interface via subprocess. It never imports whipper's internals — so it stays compatible across whipper
 version bumps rather than depending on an unstable internal API.
 
 ## Features
@@ -12,7 +11,7 @@ version bumps rather than depending on an unstable internal API.
   analyze` / `whipper offset find`), with the confirmed offset stored in
   whipper's own config.
 - Rip a disc with live dual progress bars (overall disc + current track),
-  a live track table, and album info — all parsed from whipper's own
+  a live track table, and album info, all parsed from whipper's own
   real-time output.
 - Custom track/disc file naming templates, with live validation against
   whipper's actual template rules.
@@ -23,7 +22,7 @@ version bumps rather than depending on an unstable internal API.
   found" options for damaged or obscure discs.
 - Eject button, and an optional auto-eject-when-finished setting.
 - Rip log verification via [OPSnet's logchecker](https://github.com/OPSnet/Logchecker)
-  (the same tool used by private trackers such as Orpheus) — runs
+  which runs
   automatically after each rip if configured, with color-coded results.
 
 ## Requirements
