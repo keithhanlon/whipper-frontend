@@ -1,6 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: whipper-frontend
-Source: https://github.com/citizenkeith/whipper-frontend
+Source: https://github.com/keithhanlon/whipper-frontend
 
 Files: *
 Copyright: 2026 Keith Hanlon

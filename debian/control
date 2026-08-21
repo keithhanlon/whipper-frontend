@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Keith Hanlon <keith@citizenkeith.com>
 Build-Depends: debhelper-compat (= 13)
 Standards-Version: 4.6.2
-Homepage: https://github.com/citizenkeith/whipper-frontend
+Homepage: https://github.com/keithhanlon/whipper-frontend
 Rules-Requires-Root: no
 
 Package: whipper-frontend
