@@ -2,7 +2,7 @@
 
 A Qt (PySide6) GUI for [whipper](https://github.com/whipper-team/whipper), an
 accurate, AccurateRip-verifying CD ripper for Linux (in the spirit of EAC/XLD).
-Whipper Frontend wraps whipper's own command-line interface via subprocess. It never imports whipper's internals — so it stays compatible across whipper
+Whipper Frontend wraps whipper's own command-line interface via subprocess. It never imports whipper's internals, so it stays compatible across whipper
 version bumps rather than depending on an unstable internal API.
 
 ## Features
