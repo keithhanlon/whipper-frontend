@@ -1,7 +1,23 @@
 # Whipper Frontend
 
-A graphical interface (GUI) for [whipper](https://github.com/whipper-team/whipper), an accurate CD ripper for Linux and an alternative to EAC/XLD).
-Whipper Frontend wraps whipper's own command-line interface via subprocess. It never imports whipper's internals, so it stays compatible across whipper
+**A graphical interface (GUI) for [whipper](https://github.com/whipper-team/whipper),
+the accurate CD ripper for Linux.** Whipper Frontend is a free, open-source
+Qt (PySide6) app for secure, AccurateRip-verified CD ripping to FLAC, an
+alternative to Exact Audio Copy (EAC) and XLD for Linux users who would
+rather not use the command line.
+
+Rip a disc with live progress bars, find your drive's read offset, name files
+with custom templates, fetch cover art, and verify the rip log, all from one
+window. Runs on Debian, Ubuntu, Linux Mint, KDE Plasma, GNOME and other
+Linux desktops.
+
+![Whipper Frontend ripping a CD to FLAC, showing live track progress](docs/screenshot.png)
+
+[**Download the latest .deb**](https://github.com/keithhanlon/whipper-frontend/releases/latest)
+· [Report a bug](https://github.com/keithhanlon/whipper-frontend/issues)
+
+Whipper Frontend wraps whipper's own command-line interface via subprocess.
+It never imports whipper's internals, so it stays compatible across whipper
 version bumps rather than depending on an unstable internal API.
 
 ## Features
@@ -10,7 +26,7 @@ version bumps rather than depending on an unstable internal API.
   analyze` / `whipper offset find`), with the confirmed offset stored in
   whipper's own config.
 - Rip a disc with live dual progress bars (overall disc + current track),
-  a live track table, and album info, all parsed from whipper's own
+  a live track table, and album info — all parsed from whipper's own
   real-time output.
 - Custom track/disc file naming templates, with live validation against
   whipper's actual template rules.
@@ -19,9 +35,12 @@ version bumps rather than depending on an unstable internal API.
   and network shares.
 - "Keep ripping if one track fails" and "rip even if metadata isn't
   found" options for damaged or obscure discs.
-- Eject button, and an optional auto-eject-when-finished setting.
+- Configurable max retries per track (whipper's default is 5; set to 0 for
+  infinite) for stubborn or scratched discs.
+- Eject button, and an optional auto-eject-when-finished setting that also
+  plays your desktop's alert sound when the rip completes.
 - Rip log verification via [OPSnet's logchecker](https://github.com/OPSnet/Logchecker)
-  which runs
+  (the same tool used by private trackers such as Orpheus) — runs
   automatically after each rip if configured, with color-coded results.
 
 ## Requirements
@@ -37,23 +56,28 @@ version bumps rather than depending on an unstable internal API.
 
 ### Option A: Debian package (recommended on Debian/Ubuntu-based systems)
 
-A `.deb` is available under `debian/` ; build it yourself with:
-
-```bash
-sudo apt install debhelper-compat
-dpkg-buildpackage -us -uc -b
-```
-
-This produces `../whipper-frontend_<version>_all.deb` in the parent
-directory. Install it with:
+Download the `.deb` from the
+[Releases page](https://github.com/keithhanlon/whipper-frontend/releases/latest)
+and install it:
 
 ```bash
 sudo apt install ./whipper-frontend_<version>_all.deb
 ```
 
 This pulls in `whipper`, the system PySide6 packages, and all other
-dependencies automatically — no virtual environment needed. The app is then
-available as `whipper-frontend` on your `PATH` and in your application menu.
+dependencies automatically, so no virtual environment is needed. The app is
+then available as `whipper-frontend` on your `PATH` and in your application
+menu.
+
+To build the package yourself from source instead:
+
+```bash
+sudo apt install debhelper dh-python
+dpkg-buildpackage -us -uc -b
+```
+
+This produces `../whipper-frontend_<version>_all.deb` in the parent
+directory.
 
 ### Option B: Run from source
 
@@ -80,6 +104,7 @@ whippergui/
   device_utils.py           Optical drive detection
   settings.py               Persisted app settings (QSettings)
   settings_dialog.py        Tabbed Settings window
+  sound.py                  Desktop alert sound on completion
   templates_dialog.py       Track/disc naming template editor
   whipper_config.py         Reads/writes whipper's own config file
   log_verify.py             Runs and parses OPSnet's logchecker
