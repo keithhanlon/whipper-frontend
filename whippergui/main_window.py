@@ -22,6 +22,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from whippergui.about_dialog import AboutDialog
 from whippergui.device_utils import DriveInfo, list_drives
 from whippergui.log_verify import find_logchecker, verify_log
 from whippergui.log_verify_dialog import LogVerifyDialog
@@ -64,6 +65,16 @@ class MainWindow(QMainWindow):
         verify_log_action = QAction("Verify Log…", self)
         verify_log_action.triggered.connect(self._start_log_verification)
         tools_menu.addAction(verify_log_action)
+
+        help_menu = self.menuBar().addMenu("&Help")
+
+        about_action = QAction("About Whipper Frontend", self)
+        about_action.setMenuRole(QAction.MenuRole.AboutRole)
+        about_action.triggered.connect(self._open_about_dialog)
+        help_menu.addAction(about_action)
+
+    def _open_about_dialog(self):
+        AboutDialog(self).exec()
 
     def _start_log_verification(self):
         binary = find_logchecker(self.settings.logchecker_path)
