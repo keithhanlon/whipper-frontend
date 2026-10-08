@@ -146,6 +146,7 @@ class RipOptions:
     disc_template: str | None = None     # None = use whipper's own default
     cover_art: str | None = None         # None, "file", "embed", or "complete"
     keep_going: bool = False             # -k: don't abort the disc if one track fails
+    max_retries: int | None = None       # -r: None = use whipper's own default (5); 0 = infinite
     extra_args: list[str] = field(default_factory=list)
 
     def to_cli_args(self) -> list[str]:
@@ -175,6 +176,8 @@ class RipOptions:
             args += ["-C", self.cover_art]
         if self.keep_going:
             args += ["-k"]
+        if self.max_retries is not None:
+            args += ["-r", str(self.max_retries)]
         args += self.extra_args
         return args
 

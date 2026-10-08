@@ -30,6 +30,7 @@ from whippergui.offset_utils import find_offset_for_drive
 from whippergui.rip_worker import RipOptions, RipWorker
 from whippergui.settings import Settings
 from whippergui.settings_dialog import SettingsDialog
+from whippergui.sound import play_alert_sound
 
 TRACK_COLUMNS = ["#", "Filename", "Status"]
 
@@ -345,6 +346,7 @@ class MainWindow(QMainWindow):
             disc_template=self.settings.disc_template,
             cover_art=self.settings.cover_art or None,
             keep_going=self.settings.keep_going,
+            max_retries=self.settings.max_retries,
         )
 
         self.worker = RipWorker(options)
@@ -388,6 +390,8 @@ class MainWindow(QMainWindow):
         self.rip_btn.setEnabled(True)
         self.cancel_btn.setEnabled(False)
         self.eject_btn.setEnabled(True)
+        if self.settings.eject_when_done:
+            play_alert_sound()
         self._auto_verify_log()
 
     def _auto_verify_log(self):

@@ -75,6 +75,15 @@ class Settings:
         self._qs.setValue("keep_going", value)
 
     @property
+    def max_retries(self) -> int:
+        # Matches whipper's own default (5); 0 means retry forever.
+        return int(self._qs.value("max_retries", 5))
+
+    @max_retries.setter
+    def max_retries(self, value: int):
+        self._qs.setValue("max_retries", value)
+
+    @property
     def eject_when_done(self) -> bool:
         value = self._qs.value("eject_when_done", False)
         return value if isinstance(value, bool) else str(value).lower() == "true"

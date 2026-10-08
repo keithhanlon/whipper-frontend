@@ -10,6 +10,7 @@ from PySide6.QtWidgets import (
     QMessageBox,
     QPushButton,
     QRadioButton,
+    QSpinBox,
     QTabWidget,
     QVBoxLayout,
     QWidget,
@@ -89,6 +90,26 @@ class SettingsDialog(QDialog):
             lambda checked: setattr(self.settings, "eject_when_done", checked)
         )
         layout.addWidget(eject)
+
+        retries_row = QHBoxLayout()
+        retries_row.addWidget(QLabel("Max retries per track:"))
+        retries_spin = QSpinBox()
+        retries_spin.setRange(0, 999)
+        retries_spin.setSpecialValueText("Infinite")
+        retries_spin.setValue(self.settings.max_retries)
+        retries_spin.setToolTip(
+            "How many times whipper retries a track before giving up on the "
+            "whole disc (or skipping it, if 'keep ripping' above is on). "
+            "Whipper's own default is 5. Set to 0 for infinite retries — "
+            "useful for a stubborn disc, but it may never finish on damaged "
+            "media."
+        )
+        retries_spin.valueChanged.connect(
+            lambda value: setattr(self.settings, "max_retries", value)
+        )
+        retries_row.addWidget(retries_spin)
+        retries_row.addStretch(1)
+        layout.addLayout(retries_row)
 
         layout.addStretch(1)
         return widget
