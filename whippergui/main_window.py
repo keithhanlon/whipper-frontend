@@ -2,6 +2,7 @@
 import glob
 import os
 import subprocess
+import time
 
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import (
@@ -370,6 +371,7 @@ class MainWindow(QMainWindow):
         self.worker.output_directory.connect(self._on_output_directory)
         self.worker.log_line.connect(self.log_pane.appendPlainText)
         self.worker.finished_ok.connect(self._on_finished)
+        self.worker.finished_with_skipped.connect(self._on_finished_with_skipped)
         self.worker.failed.connect(self._on_failed)
 
         self.rip_btn.setEnabled(False)
@@ -382,6 +384,7 @@ class MainWindow(QMainWindow):
         self.album_label.setText("")
         self.track_table.setRowCount(0)
         self._current_rip_output_dir: str | None = None
+        self._rip_started_at = time.time()
 
         self.worker.start()
 
@@ -403,6 +406,25 @@ class MainWindow(QMainWindow):
         self.eject_btn.setEnabled(True)
         if self.settings.eject_when_done:
             play_alert_sound()
+        self._auto_verify_log()
+
+    def _on_finished_with_skipped(self):
+        """The disc finished and whipper wrote its log, but one or more
+        tracks couldn't be ripped and were skipped. That's a partial
+        success, not a crash, so still show the log score. No completion
+        sound here -- the rip wasn't clean."""
+        self.status_label.setText("Finished with errors")
+        self.rip_btn.setEnabled(True)
+        self.cancel_btn.setEnabled(False)
+        self.eject_btn.setEnabled(True)
+
+        QMessageBox.warning(
+            self,
+            "Rip finished with errors",
+            "Some tracks couldn't be ripped after all retries and were "
+            "skipped. The rest of the disc was ripped and a log was written; "
+            "the log shows which tracks failed.",
+        )
         self._auto_verify_log()
 
     def _auto_verify_log(self):
@@ -440,7 +462,16 @@ class MainWindow(QMainWindow):
         )
         if not candidates:
             return None
-        return max(candidates, key=os.path.getmtime)
+        newest = max(candidates, key=os.path.getmtime)
+
+        # Only trust a log written during THIS rip. Without this, the
+        # fallback scan could hand back an older rip's log and show its
+        # score as if it belonged to the disc that just finished. A few
+        # seconds of slack covers coarse mtime resolution on some filesystems.
+        started = getattr(self, "_rip_started_at", None)
+        if started is not None and os.path.getmtime(newest) < started - 5:
+            return None
+        return newest
 
     def _on_failed(self, message: str):
         self.status_label.setText("Failed")

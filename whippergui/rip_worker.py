@@ -49,6 +49,10 @@ _CRC_MATCH_RE = re.compile(r"CRCs match for track (\d+)")
 
 # Verified verbatim against whipper/program/cdrdao.py:
 #   logger.info("creating output directory %s", t_dirn)
+# whipper's exit status for "disc ripped, but some tracks were skipped"
+# (see `return 5` at the end of Rip.do() in whipper/command/cd.py).
+_EXIT_TRACKS_SKIPPED = 5
+
 _OUTPUT_DIR_RE = re.compile(r"creating output directory (.+?)\s*$")
 
 _TOC_WEIGHT = 3
@@ -192,6 +196,9 @@ class RipWorker(QThread):
     output_directory = Signal(str)         # directory whipper is writing tracks/log into
     log_line = Signal(str)                 # raw output line, for a log pane
     finished_ok = Signal()
+    # whipper finished the disc and wrote its log, but skipped one or more
+    # tracks it couldn't rip (only possible with -k / "keep going").
+    finished_with_skipped = Signal()
     failed = Signal(str)                   # error message
 
     def __init__(self, options: RipOptions, parent=None):
@@ -250,6 +257,10 @@ class RipWorker(QThread):
 
         if self._cancelled:
             self.failed.emit("Rip cancelled")
+        elif return_code == _EXIT_TRACKS_SKIPPED:
+            # Not a crash: whipper ran to the end, wrote the .log and .cue,
+            # then returned 5 because some tracks were skipped (-k).
+            self.finished_with_skipped.emit()
         elif return_code != 0:
             # Show whatever whipper actually said just before it exited,
             # not just the exit code — e.g. an unhandled Python traceback
